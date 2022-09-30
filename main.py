@@ -15,24 +15,31 @@ if __name__ == "__main__":
 
 
     @wf.task()
-    def helloworld():
-        print(ctx.task_key())
-        print("hello world")
-
+    def dummy_task():
+        print("dummy_task")
+        return "debug"
 
     @wf.task()
-    def helloworld2(*, test=1234):
-        print(test)
-        print(ctx.task_key(debug="test23"))
-#         print(dbutils.widgets.get("brickflow_task_key"))
-        print("hello world2")
+    def analyze_table():
+        dbutils.data.summarize(spark.table("diamonds"))
 
 
-    with Project("sritestproject", mode=Stage.execute,
-                 execute_workflow="sri-workflow",
-                 execute_task="helloworld2",
+    @wf.task(depends_on=[analyze_table])
+    def read_table(*, test=1234):
+        spark.table("diamonds").display()
+
+
+    @wf.task(depends_on=[read_table])
+    def write_table(*, test=1234):
+        spark.table("diamonds").write.mode("overwrite").saveAsTable("sri_demo.diamonds")
+
+
+    with Project("sritestproject",
+                 mode=Stage.execute,
+                 debug_execute_workflow="sri-workflow",
+                 debug_execute_task="dummy_task",
                  git_repo="https://github.com/stikkireddy/brickflow-examples",
-                 entry_point_path="/test",
+                 entry_point_path="main",
                  provider="github",
                  git_reference="branch/main") as f:
         f.add_workflow(wf)
