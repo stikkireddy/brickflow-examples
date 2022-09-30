@@ -14,33 +14,31 @@ from sdk.engine.workflow import Workflow
 if __name__ == "__main__":
     ctx = Context()
     workflows = []
-    for i in range(5):
-        wf = Workflow(name=f"sri-workflow-{i}", existing_cluster="1011-090100-bait793")
+
+    wf = Workflow(name=f"sri-workflow", existing_cluster="1011-090100-bait793")
 
 
-        @wf.task()
-        def dummy_task():
-            print("dummy_task")
-            return "debug"
+    @wf.task()
+    def dummy_task():
+        print("dummy_task")
+        return "debug"
 
-        @wf.task()
-        def analyze_table():
-            dbutils.data.summarize(spark.table("diamonds"))
-
-
-        read_tasks = [f"read_table_{i}"for i in range(5)]
-        for t in read_tasks:
-            @wf.task(name=t, depends_on=[analyze_table])
-            def read_table(*, test=1234):
-                if t == "read_table_1":
-                    spark.table("diamonds").limit(9).display()
-
-        @wf.task(depends_on=read_tasks)
-        def write_table(*, test=1234):
-            spark.table("diamonds").write.mode("overwrite").saveAsTable("sri_demo.diamonds_brickflow")
+    @wf.task()
+    def analyze_table():
+        dbutils.data.summarize(spark.table("diamonds"))
 
 
-        workflows.append(wf)
+    read_tasks = [f"read_table_{i}"for i in range(3)]
+    for t in read_tasks:
+        @wf.task(name=t, depends_on=[analyze_table])
+        def read_table(*, test=1234):
+            if t == "read_table_1":
+                spark.table("diamonds").limit(10).display()
+
+    @wf.task(depends_on=read_tasks)
+    def write_table(*, test=1234):
+        spark.table("diamonds").write.mode("overwrite").saveAsTable("sri_demo.diamonds_brickflow")
+
 
 
     with Project("sritestproject",
@@ -48,8 +46,7 @@ if __name__ == "__main__":
                      # debug_execute_task="dummy_task",
                      entry_point_path="main",
                  ) as f:
-        for wflow in workflows:
-            f.add_workflow(wflow)
+        f.add_workflow(wf)
 
 
 # COMMAND ----------
