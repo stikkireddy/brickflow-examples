@@ -24,6 +24,7 @@ if __name__ == "__main__":
     def helloworld2(*, test=1234):
         print(test)
         print(ctx.task_key(default="test23"))
+        print(dbutils.widgets.get("brickflow_task_key"))
         print("hello world2")
 
 
