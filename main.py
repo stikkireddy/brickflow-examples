@@ -3,15 +3,17 @@
 
 # COMMAND ----------
 
-from decouple import config
 from dotenv import load_dotenv
+load_dotenv()  # take environment variables from .env.
+
+from decouple import config
 from sdk.engine.context import Context
 from sdk.engine.project import Project, Stage, BrickFlowEnvVars
 from sdk.engine.workflow import Workflow
 
 if __name__ == "__main__":
 
-    load_dotenv()  # take environment variables from .env.
+
     # print("hello world")
     ctx = Context()
 
