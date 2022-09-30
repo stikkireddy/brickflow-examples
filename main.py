@@ -32,9 +32,7 @@ if __name__ == "__main__":
         @wf.task(name=t, depends_on=[analyze_table])
         def read_table(*, test=1234):
             if t == "read_table_1":
-                spark.table("diamonds").display()
-            else:
-                spark.table("diamonds").display()
+                spark.table("diamonds").limit(9).display()
 
     @wf.task(depends_on=read_tasks)
     def write_table(*, test=1234):
