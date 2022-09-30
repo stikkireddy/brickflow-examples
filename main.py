@@ -1,23 +1,18 @@
 # Databricks notebook source
 # MAGIC %pip install -U git+https://github.com/stikkireddy/brickflow.git
+# MAGIC %pip install -U python-dotenv
 
 # COMMAND ----------
 
 from dotenv import load_dotenv
 load_dotenv()  # take environment variables from .env.
 
-from decouple import config
 from sdk.engine.context import Context
-from sdk.engine.project import Project, Stage, BrickFlowEnvVars
+from sdk.engine.project import Project
 from sdk.engine.workflow import Workflow
 
 if __name__ == "__main__":
-
-
-    # print("hello world")
     ctx = Context()
-
-    print(Stage[config(BrickFlowEnvVars.BRICKFLOW_MODE.value, default="execute")])
 
     wf = Workflow(name="sri-workflow", existing_cluster="1011-090100-bait793")
 
