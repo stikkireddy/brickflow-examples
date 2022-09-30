@@ -39,7 +39,7 @@ if __name__ == "__main__":
         dbutils.data.summarize(spark.table("diamonds"))
 
 
-    read_tasks = [f"read_table_{i}"for i in range(3)]
+    read_tasks = [f"read_table_{i}"for i in range(10)]
     for t in read_tasks:
         @wf.task(name=t, depends_on=[analyze_table])
         def read_table(*, test=1234):
