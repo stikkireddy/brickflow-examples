@@ -5,20 +5,25 @@
 
 from sdk.engine.project import Project, Stage
 from sdk.engine.workflow import Workflow
+from sdk.engine.context import Context
 
 if __name__ == "__main__":
     # print("hello world")
+    ctx = Context()
 
     wf = Workflow(name="sri-workflow", existing_cluster="1011-090100-bait793")
 
 
     @wf.task()
     def helloworld():
+        print(ctx.task_key())
         print("hello world")
 
 
     @wf.task()
     def helloworld2(*, test=1234):
+        print(test)
+        print(ctx.task_key(default="test23"))
         print("hello world2")
 
 
