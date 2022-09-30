@@ -3,13 +3,19 @@
 
 # COMMAND ----------
 
-from sdk.engine.project import Project, Stage
-from sdk.engine.workflow import Workflow
+from decouple import config
+from dotenv import load_dotenv
 from sdk.engine.context import Context
+from sdk.engine.project import Project, Stage, BrickFlowEnvVars
+from sdk.engine.workflow import Workflow
 
 if __name__ == "__main__":
+
+    load_dotenv()  # take environment variables from .env.
     # print("hello world")
     ctx = Context()
+
+    print(Stage[config(BrickFlowEnvVars.BRICKFLOW_MODE.value, default="execute")])
 
     wf = Workflow(name="sri-workflow", existing_cluster="1011-090100-bait793")
 
@@ -39,13 +45,10 @@ if __name__ == "__main__":
 
 
     with Project("sritestproject",
-                 mode=Stage.execute,
-                 debug_execute_workflow="sri-workflow",
-                 debug_execute_task="dummy_task",
-                 git_repo="https://github.com/stikkireddy/brickflow-examples",
-                 entry_point_path="main",
-                 provider="github",
-                 git_reference="branch/main") as f:
+                     # debug_execute_workflow="sri-workflow",
+                     # debug_execute_task="dummy_task",
+                     entry_point_path="main",
+                 ) as f:
         f.add_workflow(wf)
 
 # COMMAND ----------
