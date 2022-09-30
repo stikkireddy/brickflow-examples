@@ -17,13 +17,24 @@ if __name__ == "__main__":
 
     wf = Workflow(name=f"sri-workflow", existing_cluster="1011-090100-bait793")
 
+    def read_csv(file):
+        print("reading csv file")
+        return file
 
     @wf.task()
     def dummy_task():
         print("dummy_task")
+        read_csv("file://some other file")
         return "debug"
 
     @wf.task()
+    def read_csv_task():
+        print("dummy_task")
+        read_csv("file://some other file")
+        return "debug"
+
+
+    @wf.task(depends_on=[read_csv_task])
     def analyze_table():
         dbutils.data.summarize(spark.table("diamonds"))
 
