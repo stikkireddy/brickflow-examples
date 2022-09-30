@@ -1,0 +1,7 @@
+terraform.sritestproject.tfstate
+terraform.sritestproject.tfstate.backup
+cdktf.json
+cdktf.out
+.env
+.dbx
+venv
