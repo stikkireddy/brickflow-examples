@@ -6,3 +6,4 @@ cdktf.out
 .dbx
 venv
 .idea
+.terraform.*
