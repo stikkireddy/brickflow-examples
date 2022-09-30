@@ -32,15 +32,21 @@ if __name__ == "__main__":
     @wf.task()
     # @wf.bind_airflow_task(dag, "task_1243")
     def read_csv_task():
-        pass
-        # print("dummy_task")
-        # read_csv("file://some other file")
-        # return "debug"
+        # pass
+        print("dummy_task")
+        read_csv("file://some other file")
+        return "debug"
 
 
-    @wf.task(depends_on=[read_csv_task])
+    @wf.task(depends_on=[read_csv_task], task_type=TaskType)
     def analyze_table():
         dbutils.data.summarize(spark.table("diamonds"))
+
+
+    # @wf.task
+    # class DLTPipeline(WF.DLTPIPELINE):
+    #     @dlt.table
+    #     def ...
 
 
     read_tasks = [f"read_table_{i}"for i in range(3)]
@@ -62,7 +68,7 @@ if __name__ == "__main__":
     # @wf.task(depends_on=dq_checks)
     def write_table(*, test=1234):
         # print(test)
-        spark.table("diamonds").write.mode("overwrite").saveAsTable("sri_demo.diamonds_brickflow")
+        spark.table("diamonds").write.mode("overwrite").saveAsTable("sri_demo.diamonds_brickflow2")
 
 
 
