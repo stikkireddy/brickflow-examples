@@ -43,7 +43,7 @@ if __name__ == "__main__":
         dbutils.data.summarize(spark.table("diamonds"))
 
 
-    read_tasks = [f"read_table_{i}"for i in range(3)]
+    read_tasks = [f"read_table_{i}"for i in range(5)]
     dq_checks = []
     for t in read_tasks:
         @wf.task(name=t, depends_on=[analyze_table])
@@ -54,12 +54,14 @@ if __name__ == "__main__":
 
         dq_checks.append(f"dq_{t}")
         @wf.task(name=f"dq_{t}", depends_on=[t])
-        def read_table2(*, test=1234):
+        def run_dq(*, test=1234):
             if t == "read_table_1":
                 spark.table("diamonds").limit(10).display()
 
     @wf.task(depends_on=dq_checks)
+    # @wf.task(depends_on=dq_checks)
     def write_table(*, test=1234):
+        # print(test)
         spark.table("diamonds").write.mode("overwrite").saveAsTable("sri_demo.diamonds_brickflow")
 
 
