@@ -38,7 +38,7 @@ if __name__ == "__main__":
         return "debug"
 
 
-    @wf.task(depends_on=[read_csv_task], task_type=TaskType)
+    @wf.task(depends_on=[read_csv_task])
     def analyze_table():
         dbutils.data.summarize(spark.table("diamonds"))
 
