@@ -24,14 +24,18 @@ if __name__ == "__main__":
         dbutils.data.summarize(spark.table("diamonds"))
 
 
-    @wf.task(depends_on=[analyze_table])
-    def read_table(*, test=1234):
-        spark.table("diamonds").display()
+    read_tasks = [f"read_table_{i}"for i in range(2)]
+    for t in read_tasks:
+        @wf.task(name=t, depends_on=[analyze_table])
+        def read_table(*, test=1234):
+            if t == "read_table_1":
+                spark.table("diamonds").display()
+            else:
+                spark.table("diamonds").display()
 
-
-    @wf.task(depends_on=[read_table])
+    @wf.task(depends_on=read_tasks)
     def write_table(*, test=1234):
-        spark.table("diamonds").write.mode("overwrite").saveAsTable("sri_demo.diamonds")
+        spark.table("diamonds").write.mode("overwrite").saveAsTable("sri_demo.diamonds_brickflow")
 
 
     with Project("sritestproject",
