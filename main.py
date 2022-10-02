@@ -7,9 +7,9 @@
 from dotenv import load_dotenv
 load_dotenv()  # take environment variables from .env.
 
-from sdk.engine.context import Context
-from sdk.engine.project import Project
-from sdk.engine.workflow import Workflow
+from brickflow.engine.context import Context
+from brickflow.engine.project import Project
+from brickflow.engine.workflow import Workflow
 
 if __name__ == "__main__":
     ctx = Context()
@@ -22,8 +22,8 @@ if __name__ == "__main__":
         return file
 
 
-    # @wf.bind_airflow_task(dag, "task_id")
-    @wf.task()
+    @wf.bind_airflow_task(dag, "task_id")
+    # @wf.task()
     def dummy_task():
         print("dummy_task")
         read_csv("file://some other file")
