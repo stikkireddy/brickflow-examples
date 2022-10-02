@@ -31,18 +31,12 @@ if __name__ == "__main__":
     def branch_task():
         pass
 
-
-    @wf.bind_airflow_task(name="dummy_task", depends_on=[start_task])
-    def dummy_task():
-        pass
-
-
-    @wf.bind_airflow_task(name="continue_task", depends_on=[branch_task, dummy_task])
+    @wf.bind_airflow_task(name="continue_task", depends_on=[branch_task])
     def continue_task():
         pass
 
 
-    @wf.bind_airflow_task(name="stop_task", depends_on=[branch_task, dummy_task])
+    @wf.bind_airflow_task(name="stop_task", depends_on=[branch_task])
     def stop_task():
         pass
 
