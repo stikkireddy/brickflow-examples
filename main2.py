@@ -1,9 +1,9 @@
 # Databricks notebook source
 # MAGIC %pip install -U git+https://github.com/stikkireddy/brickflow.git
 # MAGIC %pip install -U python-dotenv
-# MAGIC %pip install apache-airflow==1.10.14 markupsafe==2.0.1
 
 # COMMAND ----------
+import logging
 
 from dotenv import load_dotenv
 
@@ -31,6 +31,7 @@ if __name__ == "__main__":
     def branch_task():
         pass
 
+
     @wf.bind_airflow_task(name="continue_task", depends_on=[branch_task])
     def continue_task():
         pass
@@ -46,6 +47,11 @@ if __name__ == "__main__":
         pass
 
 
+    @wf.bind_airflow_task(name="continue3_task", depends_on=[continue2_task])
+    def continue3_task():
+        pass
+
+
     @wf.bind_airflow_task(name="stop2_task", depends_on=[stop_task])
     def stop2_task():
         pass
@@ -57,12 +63,16 @@ if __name__ == "__main__":
         pass
 
 
+    @wf.task(name="ending_task", depends_on=[join_task])
+    def ending_task():
+        logging.info("hello world 1234 ending task")
+
+
     with Project("sritestproject2",
-                     # debug_execute_workflow="sri-workflow",
-                     # debug_execute_task="dummy_task",
-                     entry_point_path="main2",
+                 # debug_execute_workflow="sri-workflow",
+                 # debug_execute_task="dummy_task",
+                 entry_point_path="main2",
                  ) as f:
         f.add_workflow(wf)
-
 
 # COMMAND ----------
