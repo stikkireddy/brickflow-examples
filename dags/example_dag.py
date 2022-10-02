@@ -49,6 +49,13 @@ continue2_op = BashOperator(
     bash_command="echo continue2",
     xcom_push=True,
     dag=dag)
+
+continue3_op = BashOperator(
+    task_id='continue3_task',
+    bash_command="echo continue3",
+    xcom_push=True,
+    dag=dag)
+
     # DummyOperator(task_id='continue_task', dag=dag)
 stop_op = BashOperator(
     task_id='stop_task',
