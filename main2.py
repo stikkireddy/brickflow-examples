@@ -5,6 +5,7 @@
 # COMMAND ----------
 import logging
 
+from brickflow.engine.utils import resolve_py4j_logging
 from dotenv import load_dotenv
 
 from dags.example_dag import dag
@@ -14,6 +15,8 @@ load_dotenv()  # take environment variables from .env.
 from brickflow.engine.context import Context
 from brickflow.engine.project import Project
 from brickflow.engine.workflow import Workflow
+
+resolve_py4j_logging()
 
 if __name__ == "__main__":
     ctx = Context()
