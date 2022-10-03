@@ -7,18 +7,13 @@ import logging
 
 from brickflow.context.context import ctx
 from brickflow.engine.project import Project
-from brickflow.engine.task import Task
 from brickflow.engine.workflow import Workflow
+
 from dags.example_dag2 import dag
 
 if __name__ == "__main__":
-
     wf = Workflow(name="sri-workflow-new-ops", existing_cluster="1011-090100-bait793", airflow_110_dag=dag)
 
-
-    # @wf.bind_airflow_task(name="no_op")
-    # def no_op():
-    #     pass
 
     @wf.bind_airflow_task(name="start_task")
     def start_task():
@@ -29,10 +24,6 @@ if __name__ == "__main__":
     def branch_task():
         pass
 
-
-    # @wf.bind_airflow_task(name="dummy_task", depends_on=[start_task])
-    # def dummy_task():
-    #     pass
 
     @wf.bind_airflow_task(name="is_ok", depends_on=[start_task])
     def is_ok():
@@ -74,7 +65,7 @@ if __name__ == "__main__":
         logging.info("hello world 1234 ending task")
 
 
-    @wf.task( depends_on=[ending_task])
+    @wf.task(depends_on=[ending_task])
     def ending_task2():
         ctx.skip_all_following()
         logging.info("hello world 1234 ending task 2")
@@ -84,6 +75,7 @@ if __name__ == "__main__":
     def ending_task3():
         ctx.skip_all_following()
         logging.info("hello world 1234 ending task 3")
+
 
     with Project("sritestproject3",
                  debug_execute_workflow="sri-workflow-no-ops",
