@@ -4,7 +4,9 @@
 
 # COMMAND ----------
 import logging
+from datetime import timedelta
 
+from brickflow.engine.task import TaskSettings, EmailNotifications
 from brickflow.engine.utils import resolve_py4j_logging
 from dotenv import load_dotenv
 
@@ -12,17 +14,31 @@ from dags.example_dag import dag
 
 load_dotenv()  # take environment variables from .env.
 
-from brickflow.engine.context import Context
+# from brickflow.context import ctx
 from brickflow.engine.project import Project
-from brickflow.engine.workflow import Workflow
+from brickflow.engine.workflow import Workflow, WorkflowPermissions, User
 
 resolve_py4j_logging()
 
 if __name__ == "__main__":
-    ctx = Context()
     workflows = []
 
-    wf = Workflow(name=f"sri-airflow-workflow", existing_cluster="1011-090100-bait793", airflow_110_dag=dag)
+    wf = Workflow(name=f"sri-airflow-workflow",
+                  existing_cluster="1011-090100-bait793",
+                  airflow_110_dag=dag,
+                  default_task_settings=TaskSettings(
+                      email_notifications=EmailNotifications(
+                          on_failure=["sri.tikkireddy@databricks.com"]
+                      ),
+                      timeout_seconds=timedelta(hours=2).seconds
+                  ),
+                  tags={
+                      "sample_pipeline": "hello world"
+                  },
+                  permissions=WorkflowPermissions(
+                      # owner=User("sri.tikkireddy@databricks.com"),
+                      can_manage=[User("tushar.madan@databricks.com")]
+                  ))
 
 
     @wf.bind_airflow_task(name="start_task")
