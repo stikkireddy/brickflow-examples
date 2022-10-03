@@ -13,7 +13,7 @@ from dags.example_dag2 import dag
 
 if __name__ == "__main__":
 
-    wf = Workflow(name="sri-workflow", existing_cluster="1011-090100-bait793", airflow_110_dag=dag)
+    wf = Workflow(name="sri-workflow-new-ops", existing_cluster="1011-090100-bait793", airflow_110_dag=dag)
 
 
     # @wf.bind_airflow_task(name="no_op")
