@@ -5,6 +5,7 @@
 # COMMAND ----------
 
 from dotenv import load_dotenv
+
 load_dotenv()  # take environment variables from .env.
 
 from brickflow.engine.context import Context
@@ -17,6 +18,7 @@ if __name__ == "__main__":
 
     wf = Workflow(name=f"sri-workflow", existing_cluster="1011-090100-bait793")
 
+
     def read_csv(file):
         print("reading csv file")
         return file
@@ -28,6 +30,7 @@ if __name__ == "__main__":
         print("dummy_task")
         read_csv("file://some other file")
         return "debug"
+
 
     @wf.task()
     # @wf.bind_airflow_task(dag, "task_1243")
@@ -48,8 +51,7 @@ if __name__ == "__main__":
     #     @dlt.table
     #     def ...
 
-
-    read_tasks = [f"read_table_{i}"for i in range(3)]
+    read_tasks = [f"read_table_{i}" for i in range(3)]
     dq_checks = []
     for t in read_tasks:
         @wf.task(name=t, depends_on=[analyze_table])
@@ -59,10 +61,13 @@ if __name__ == "__main__":
 
 
         dq_checks.append(f"dq_{t}")
+
+
         @wf.task(name=f"dq_{t}", depends_on=[t])
         def run_dq(*, test=1234):
             if t == "read_table_1":
                 spark.table("diamonds").limit(10).display()
+
 
     @wf.task(depends_on=dq_checks)
     # @wf.task(depends_on=dq_checks)
@@ -71,14 +76,11 @@ if __name__ == "__main__":
         spark.table("diamonds").write.mode("overwrite").saveAsTable("sri_demo.diamonds_brickflow2")
 
 
-
     with Project("sritestproject",
-                     # debug_execute_workflow="sri-workflow",
-                     # debug_execute_task="dummy_task",
-                     entry_point_path="main",
+                 # debug_execute_workflow="sri-workflow",
+                 # debug_execute_task="dummy_task",
+                 entry_point_path="main",
                  ) as f:
         f.add_workflow(wf)
 
-
 # COMMAND ----------
-

@@ -86,8 +86,8 @@ if __name__ == "__main__":
         logging.info("hello world 1234 ending task 3")
 
     with Project("sritestproject3",
-                 # debug_execute_workflow="sri-workflow",
-                 # debug_execute_task="dummy_task",
+                 debug_execute_workflow="sri-workflow-no-ops",
+                 debug_execute_task="dummy_task",
                  entry_point_path="main3",
                  ) as f:
         f.add_workflow(wf)
