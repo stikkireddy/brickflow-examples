@@ -36,7 +36,7 @@ if __name__ == "__main__":
                       "sample_pipeline": "hello world"
                   },
                   permissions=WorkflowPermissions(
-                      # owner=User("sri.tikkireddy@databricks.com"),
+                      owner=User("sri.tikkireddy@databricks.com"),
                       can_manage=[User("tushar.madan@databricks.com")]
                   ))
 
