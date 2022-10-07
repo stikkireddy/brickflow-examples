@@ -6,6 +6,7 @@
 
 import logging
 
+from brickflow.context import ctx
 from brickflow.engine.project import Project
 from brickflow.engine.workflow import Workflow
 
@@ -56,6 +57,7 @@ if __name__ == "__main__":
                 reference_db]
         logging.info(f"Recieved Args: {args}")
         spark_script_1.main(args)
+        return "FAILED"
 
 
     @wf.task(depends_on=show_tables)
@@ -86,6 +88,7 @@ if __name__ == "__main__":
                       reporting_region_cd="235",
                       reference_db="21431"):
         from scripts import spark_script_1
+        logging.info("SHOW TABLES 2 returned: ", ctx.get_return_value(show_tables_2))
         args = [exec_dt,
                 s3_dest_path,
                 target_db,
