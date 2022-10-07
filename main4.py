@@ -3,8 +3,6 @@ import logging
 from brickflow.engine.project import Project
 from brickflow.engine.workflow import Workflow
 
-from scripts import spark_script_1
-
 if __name__ == "__main__":
     wf = Workflow(name="srt-workflow-withscripts", existing_cluster="1011-090100-bait793")
 
@@ -24,6 +22,7 @@ if __name__ == "__main__":
                     integrated_db="123",
                     reporting_region_cd="235",
                     reference_db="21431"):
+        from scripts import spark_script_1
         args = [exec_dt,
                 s3_dest_path,
                 target_db,
