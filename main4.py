@@ -1,3 +1,9 @@
+# Databricks notebook source
+# MAGIC %pip install -U git+https://github.com/stikkireddy/brickflow.git
+# MAGIC %pip install -U python-dotenv
+
+# COMMAND ----------
+
 import logging
 
 from brickflow.engine.project import Project
