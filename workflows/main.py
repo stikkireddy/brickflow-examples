@@ -1,3 +1,4 @@
+from brickflow import log
 from brickflow.context import ctx
 from brickflow.engine.compute import Cluster
 
@@ -10,13 +11,13 @@ wf = Workflow("sri-workflow", clusters=[Cluster.from_existing_cluster("1011-0901
 
 
 def read_csv(file):
-    print("reading csv file")
+    log.info("reading csv file")
     return file
 
 
 @wf.task()
 def dummy_task():
-    print("dummy_task")
+    log.info("dummy_task")
     read_csv("file://some other file")
     return "debug"
 
@@ -24,7 +25,7 @@ def dummy_task():
 @wf.task()
 def read_csv_task():
     # pass
-    print("dummy_task")
+    log.info("dummy_task")
     read_csv("file://some other file")
     return "debug"
 
