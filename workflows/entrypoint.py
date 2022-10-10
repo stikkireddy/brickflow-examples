@@ -1,5 +1,9 @@
 # Databricks notebook source
 
+# MAGIC %pip install -U git+https://github.com/stikkireddy/brickflow.git
+
+# COMMAND -------
+
 import workflows
 
 from brickflow.engine.project import Project
