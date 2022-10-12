@@ -17,6 +17,6 @@ if __name__ == "__main__":
         provider="github",
         libraries=[PypiTaskLibrary(
             package="git+https://github.com/stikkireddy/brickflow.git"
-        )]
+        )],
     ) as f:
         f.add_pkg(workflows)
