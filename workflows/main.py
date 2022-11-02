@@ -1,9 +1,9 @@
 from brickflow import log
 from brickflow.context import ctx
 from brickflow.engine.compute import Cluster
+from brickflow.engine.task import PypiTaskLibrary
 
 from brickflow.engine.workflow import Workflow
-
 
 workflows = []
 
@@ -15,8 +15,8 @@ def read_csv(file):
     return file
 
 
-@wf.task()
-def dummy_task():
+@wf.task(libraries=[PypiTaskLibrary(package="networkx")])
+def train_task():
     log.info("dummy_task")
     read_csv("file://some other file")
     return "debug"
@@ -34,11 +34,6 @@ def read_csv_task():
 def analyze_table():
     ctx.dbutils.data.summarize(ctx.spark.table("diamonds"))
 
-
-# @wf.task
-# class DLTPipeline(WF.DLTPIPELINE):
-#     @dlt.table
-#     def ...
 
 read_tasks = [f"read_table_{i}" for i in range(3)]
 dq_checks = []
