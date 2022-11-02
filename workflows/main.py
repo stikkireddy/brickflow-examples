@@ -53,7 +53,7 @@ for t in read_tasks:
             ctx.spark.table("diamonds").limit(10).display()
 
 
-@wf.task(depends_on=dq_checks)
-def write_table(*, test=1234):
-    # print(test)
-    ctx.spark.table("diamonds").write.mode("overwrite").saveAsTable("sri_demo.diamonds_brickflow2")
+# @wf.task(depends_on=dq_checks)
+# def write_table(*, test=1234):
+#     # print(test)
+#     ctx.spark.table("diamonds").write.mode("overwrite").saveAsTable("sri_demo.diamonds_brickflow2")
